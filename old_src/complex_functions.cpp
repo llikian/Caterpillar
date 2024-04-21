@@ -1,6 +1,3 @@
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "cppcoreguidelines-narrowing-conversions"
-
 #include "complex_functions.h"
 
 Complex makeComplex(const float& x, const float& y) {

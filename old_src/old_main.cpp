@@ -1,8 +1,8 @@
 #include <SDL2/SDL.h>
 #include <iostream>
-#include "libs/color_functions.h"
-#include "libs/caterpillar.h"
-#include "libs/graphic_functions.h"
+#include "color_functions.h"
+#include "caterpillar.h"
+#include "graphic_functions.h"
 
 int main(int /* argc */, char** /* argv */) {
     srand(time(nullptr));

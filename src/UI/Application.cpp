@@ -67,8 +67,12 @@ void Application::run() {
         dt = 10.0f * (static_cast<float>(SDL_GetTicks64()) / 1000.0f - timer);
         timer = static_cast<float>(SDL_GetTicks64()) / 1000.0f;
 
-        drawText(10, 10, white, "Caterpillars : " + std::to_string(colony.caterpillars.size()));
-        drawText(10, 30, white, "Behavior num : " + std::to_string(behavior));
+        drawText(10, 10, white, "Behavior num : " + std::to_string(behavior));
+        if(behavior == 3 || behavior == 5) {
+            drawText(10, 30,
+                     white,
+                     "Caterpillars : " + std::to_string(colony.caterpillars.size()));
+        }
 
         drawColony();
 
@@ -111,7 +115,8 @@ void Application::drawColony() {
 
             break;
         case 2: // First particle draws a circle
-            colony[0][0].pos = center + vec2(cosf(timer), sinf(timer)) * (std::min(width, height) / 2.5f);
+            colony[0][0].pos =
+                center + vec2(cosf(timer), sinf(timer)) * (std::min(width, height) / 2.5f);
             drawParticle(colony[0][0]);
 
             for(int i = 1 ; i < colony[0].size() ; ++i) {
@@ -131,11 +136,13 @@ void Application::drawColony() {
 
                 drawParticle(caterpillar[0]);
 
-                if(caterpillar[0].pos.x <= caterpillar[0].radius || caterpillar[0].pos.x >= width - caterpillar[0].radius) {
+                if(caterpillar[0].pos.x <= caterpillar[0].radius ||
+                   caterpillar[0].pos.x >= width - caterpillar[0].radius) {
                     caterpillar[0].speed.x *= -1;
                 }
 
-                if(caterpillar[0].pos.y <= caterpillar[0].radius || caterpillar[0].pos.y >= height - caterpillar[0].radius) {
+                if(caterpillar[0].pos.y <= caterpillar[0].radius ||
+                   caterpillar[0].pos.y >= height - caterpillar[0].radius) {
                     caterpillar[0].speed.y *= -1;
                 }
 
@@ -163,8 +170,10 @@ void Application::drawColony() {
             break;
         case 5: // Snowflake
             for(int i = 0 ; i < colony.caterpillars.size() ; ++i) {
-                float angle = static_cast<float>(i) / static_cast<float>(colony.caterpillars.size());
-                colony[i][0].pos = vec2(cosf(2.0f * M_PIf * angle), sinf(2.0f * M_PIf * angle)) * (mouseF - center) + center;
+                float angle =
+                    static_cast<float>(i) / static_cast<float>(colony.caterpillars.size());
+                colony[i][0].pos = vec2(cosf(2.0f * M_PIf * angle), sinf(2.0f * M_PIf * angle)) *
+                                   (mouseF - center) + center;
 
                 drawParticle(colony[i][0]);
 
@@ -190,7 +199,8 @@ void Application::drawParticle(const Particle& particle) {
 
 Texture* Application::createTextureFromSurface(Surface* surface, bool freeSurface) {
     if(!surface) {
-        throw std::runtime_error(std::string("Surface wasn't defined (nullptr) : ") + SDL_GetError());
+        throw std::runtime_error(
+            std::string("Surface wasn't defined (nullptr) : ") + SDL_GetError());
     }
 
     Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
@@ -201,7 +211,8 @@ Texture* Application::createTextureFromSurface(Surface* surface, bool freeSurfac
 
     if(!texture) {
         SDL_FreeSurface(surface);
-        throw std::runtime_error(std::string("Couldn't create texture from surface : ") + SDL_GetError());
+        throw std::runtime_error(
+            std::string("Couldn't create texture from surface : ") + SDL_GetError());
     }
 
     return texture;
@@ -222,7 +233,8 @@ void Application::drawText(int x, int y, const Color& color, const std::string& 
     SDL_DestroyTexture(texture);
 }
 
-void Application::drawText(int x, int y, const Color& textColor, const Color& background, const std::string& text) {
+void Application::drawText(int x, int y, const Color& textColor, const Color& background,
+                           const std::string& text) {
     Surface* surface = TTF_RenderText(font, text.c_str(), textColor, background);
     if(!surface) {
         throw std::runtime_error{std::string("TTF_RenderText failed : ") + SDL_GetError()};
@@ -237,7 +249,8 @@ void Application::drawText(int x, int y, const Color& textColor, const Color& ba
     SDL_DestroyTexture(texture);
 }
 
-void Application::drawCenteredText(const Rect& reference, const Color& color, const std::string& text) {
+void
+Application::drawCenteredText(const Rect& reference, const Color& color, const std::string& text) {
     Surface* surface = TTF_RenderText_Solid(font, text.c_str(), color);
     if(!surface) {
         throw std::runtime_error{std::string("TTF_RenderText failed : ") + SDL_GetError()};
@@ -245,7 +258,8 @@ void Application::drawCenteredText(const Rect& reference, const Color& color, co
 
     Texture* texture = createTextureFromSurface(surface, false);
 
-    SDL_Rect rect(reference.x + (reference.w - surface->w) / 2, reference.y + (reference.h - surface->h) / 2, surface->w, surface->h);
+    SDL_Rect rect(reference.x + (reference.w - surface->w) / 2,
+                  reference.y + (reference.h - surface->h) / 2, surface->w, surface->h);
     SDL_RenderCopy(renderer, texture, nullptr, &rect);
 
     SDL_FreeSurface(surface);
@@ -320,8 +334,10 @@ void Application::handleInputs() {
                 colony.addCaterpillar(10, vec2(width / 2.0f, height / 2.0f));
 
                 if(behavior == 3) {
-                    colony[colony.caterpillars.size() - 1][0].pos = vec2::random(10.0f, width - 10.0f, 10.0f, height - 10.0f);
-                    colony[colony.caterpillars.size() - 1][0].speed = vec2::random(-100.0f, 100.0f);
+                    colony.caterpillars.back()[0].pos = vec2::random(10.0f, width - 10.0f,
+                                                                     10.0f,
+                                                                     height - 10.0f);
+                    colony.caterpillars.back()[0].speed = vec2::random(-100.0f, 100.0f);
                 }
             }
 
@@ -331,9 +347,9 @@ void Application::handleInputs() {
                 colony.removeCaterpillar();
 
                 if(behavior == 3) {
-                    colony[colony.caterpillars.size() - 1][0].pos.x = width / 2.0f;
-                    colony[colony.caterpillars.size() - 1][0].pos.y = height / 2.0f;
-                    colony[colony.caterpillars.size() - 1][0].speed = vec2::random(-50.0f, 50.0f);
+                    colony.caterpillars.back()[0].pos.x = width / 2.0f;
+                    colony.caterpillars.back()[0].pos.y = height / 2.0f;
+                    colony.caterpillars.back()[0].speed = vec2::random(-50.0f, 50.0f);
                 }
             }
 
@@ -348,7 +364,7 @@ void Application::changeBehaviorTo() {
         case 3:
             for(Caterpillar& caterpillar: colony.caterpillars) {
                 caterpillar[0].speed = vec2::random(-50.0f, 50.0f);
-                for(Particle& particle : caterpillar) {
+                for(Particle& particle: caterpillar) {
                     particle.pos.x = width / 2.0f;
                     particle.pos.y = height / 2.0f;
                 }
