@@ -34,7 +34,7 @@ The controls for the second version are:
 ### Dependencies
 On a Debian system you can install the needed dependencies using:
 ```shell
-sudo apt install libsdl2-dev libsdl2-ttf-dev
+sudo apt install g++ cmake make libsdl2-dev libsdl2-ttf-dev -y
 ```
 
 ### Clone Repository
